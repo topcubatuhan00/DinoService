@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DinoService.Core\DinoService.Core.csproj" />
+    <ProjectReference Include="..\DinoService.DataAccess\DinoService.DataAccess.csproj" />
+    <ProjectReference Include="..\DinoService.Entities\DinoService.Entities.csproj" />
+  </ItemGroup>
+
+</Project>

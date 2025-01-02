@@ -1,0 +1,144 @@
+﻿@{
+    ViewData["Title"] = "List Product";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="page-header px-5 pt-3">
+    <h3 class="page-title"> Serviste Bulunan Ürünler </h3>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin">Ana Sayfa</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="/product/saveproduct">Ürün Ekle</a></li>
+        </ol>
+    </nav>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="productTable" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th class="text-left">Müşteri</th>
+                        <th class="text-left">M. No.</th>
+                        <th class="text-left">M. Tabela Adı</th>
+                        <th class="text-left">Ürün Adı</th>
+                        <th class="text-left">Ürün Adeti</th>
+                        <th class="text-left">Ürün Problemi</th>
+                        <th class="text-left">Durumu</th>
+                        <th class="text-left">Yan Ürünler</th>
+                        <th class="text-left">Kayıt Tarihi</th>
+                        <th class="text-left">S. Değişiklik Tarihi</th>
+                        <th class="text-left">Teslim Tarihi</th>
+                        <th class="text-left">Teslim Alan</th>
+                        <th class="text-left">Kargo Alıcısı</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+    .cursor-pointer {
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    window.addEventListener("load", () => {
+        var table = "";
+        table = $('#productTable').DataTable({
+            ajax: {
+                url: "/Product/GetProducts",
+                type: "POST",
+            },
+            processing: true,
+            serverSide: true,
+            scrollX: true, // Yatay kaydırma eklendi
+            responsive: true, // Responsiveness sağlandı
+            autoWidth: false, // Genişlik ayarını elle kontrol et
+            pageLength: 25,
+            scrollY: "500px",
+            language: {
+                search: "Ara: "
+            },
+            columnDefs: [
+                { targets: 0, width: "250px", class: "text-left cursor-pointer" }, // Müşteri
+                { targets: 1, width: "250px", class: "text-left cursor-pointer" }, // M. No.
+                { targets: 2, width: "250px", class: "text-left cursor-pointer" }, // M. Tabela Adı
+                { targets: 3, width: "250px", class: "text-left cursor-pointer" }, // Ürün Adı
+                { targets: 4, width: "250px", class: "text-left cursor-pointer" },  // Ürün Adeti
+                { targets: 5, width: "400px", class: "text-left cursor-pointer" }, // Ürün Problemi
+                { targets: 6, width: "250px", class: "text-left cursor-pointer" }, // Durumu
+                { targets: 7, width: "250px", class: "text-left cursor-pointer" }, // Yan Ürünler
+                { targets: 8, width: "250px", class: "text-left cursor-pointer" }, // Kayıt Tarihi
+                { targets: 9, width: "250px", class: "text-left cursor-pointer" }, // S. Değişiklik Tarihi
+                { targets: 10, width: "250px", class: "text-left cursor-pointer" }, // Teslim Tarihi
+                { targets: 11, width: "250px", class: "text-left cursor-pointer" }, // Teslim Alan
+                { targets: 12, width: "250px", class: "text-left cursor-pointer" }, // Kargo Alıcısı
+            ],
+            columns: [
+                {
+                    data: null,
+                    name: "FullName",
+                    render: function (data) {
+                        return `${data.customerName || ''} ${data.customerLastName || ''}`;
+                    }
+                },
+                { data: "customerPhoneNumber", name: "customerPhoneNumber" },
+                { data: "customerCompanyName", name: "customerCompanyName" },
+                { data: "productName", name: "productName" },
+                { data: "productAmount", name: "productAmount" },
+                { data: "productProblem", name: "productProblem" },
+                { data: "status", name: "status" },
+                { data: "otherItems", name: "otherItems" },
+                {
+                    data: "serviceRegistirationDate",
+                    name: "serviceRegistirationDate",
+                    render: function (data) {
+                        if (data) {
+                            const [date, time] = data.split('T');
+                            return date;
+                        }
+                        return '';
+                    }
+                },
+                {
+                    data: "lastStatusChangeDate",
+                    name: "lastStatusChangeDate",
+                    render: function (data) {
+                        if (data) {
+                            const [date, time] = data.split('T');
+                            return date;
+                        }
+                        return '';
+                    }
+                },
+                {
+                    data: "serviceLeaveDate",
+                    name: "serviceLeaveDate",
+                    render: function (data) {
+                        if (data) {
+                            const [date, time] = data.split('T');
+                            return date;
+                        }
+                        return '';
+                    }
+                },
+                { data: "teslimAlan", name: "teslimAlan" },
+                { data: "kargoAlici", name: "kargoAlici" },
+            ],
+        });
+
+        $('#productTable tbody').on('dblclick', 'tr', function () {
+            const rowData = table.row(this).data(); // Satırdaki veri alınır
+            const productId = rowData.id; // ID kolonu alınır (backend'den gelen veri alanı olmalı)
+
+            if (productId) {
+                window.location.href = `/Product/Detail/${productId}`; // Detay sayfasına yönlendirme
+            }
+        });
+    });
+</script>

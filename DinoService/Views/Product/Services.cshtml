@@ -1,0 +1,111 @@
+﻿@using DinoService.ViewModels
+@model GetServiceInformationViewModel
+@{
+    ViewData["Title"] = "Servisteki Ürün Bilgisi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- service section -->
+
+<section class="service_section layout_padding">
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h2>
+                Servisteki Ürün Bilgisi
+            </h2>
+        </div>
+    </div>
+    <div class="container ">
+        <div class="row">
+            <div class="w-100">
+                <div class="box">
+                    <div class="img-box">
+                        <img src="~/hostit-html/images/s1.png" alt="">
+                    </div>
+                    <div class="detail-box w-50">
+                        <form id="serviceForm">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="mb-3">
+                                <label asp-for="ServiceNumber" class="form-label"></label>
+                                <input asp-for="ServiceNumber" id="ServiceNumber" class="form-control" />
+                                <span asp-validation-for="ServiceNumber" class="text-danger"></span>
+                            </div>
+                            <input type="button" id="submitButton" value="Ürün Bilgisini Getir" class="btn btn-success w-100 p-2" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="infoArea" class="w-100 mt-5 d-none">
+                <div class="box ">
+                    <table class="table table-dark">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Ad Soyad</th>
+                                <th scope="col">Ürün Bilgisi</th>
+                                <th scope="col">Son İşlem Tarihi</th>
+                                <th scope="col">Servis Durumu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- end service section -->
+
+<script>
+    document.getElementById('submitButton').addEventListener('click', function () {
+        // Formdaki veriyi hazırla
+        const serviceNumber = document.getElementById('ServiceNumber').value;
+
+        // AJAX ile POST isteği gönder
+        fetch('/Product/GetServiceInformation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ ServiceNumber: serviceNumber }) // Form verisi
+        })
+            .then(response => response.json()) // JSON olarak cevap al
+            .then(data => {
+                // Gelen JSON'u ekranda göster
+                console.log(data)
+
+                const infoArea = document.getElementById('infoArea');
+                const tbody = infoArea.querySelector('tbody');
+
+                // Tabloyu önce temizle
+                tbody.innerHTML = "";
+
+                if (data.success) {
+                    document.getElementById('infoArea').className = "d-block w-100 mt-5"
+
+                    data.data.forEach((item, index) => {
+                        console.log(item)
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                                <th scope="row">${index + 1}</th>
+                                        <td>${item.customerName + " " + item.customerLastName}</td>
+                                <td>${item.productName}</td>
+                                        <td>${item.lastStatusChangeDate === null ? item.serviceRegistirationDate.split('T')[0] + ' ' + item.serviceRegistirationDate.split('T')[1].split(':')[0] +':'+item.serviceRegistirationDate.split('T')[1].split(':')[1] : item.lastStatusChangeDate}</td>
+                                <td>${item.status}</td>
+                            `;
+                        tbody.appendChild(row);
+                    });
+                
+                } else {
+                    document.getElementById('infoArea').className = "d-none w-100 mt-5"
+                }
+            })
+            .catch(error => {
+                console.error('Hata:', error);
+            });
+    
+    });
+</script>

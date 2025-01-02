@@ -1,0 +1,142 @@
+﻿@using DinoService.Services
+@inject IServiceInformationService _service;
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var data = await _service.GetHomeData();
+}
+
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-md-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="d-sm-flex align-items-baseline report-summary-header">
+                                <h5 class="font-weight-semibold">Servis Özeti</h5> <span class="ms-auto">Güncelle</span> <button class="btn btn-icons border-0 p-2"><i class="icon-refresh"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row report-inner-cards-wrapper">
+                        <div class=" col-md -6 col-xl report-inner-card">
+                            <div class="inner-card-text">
+                                <span class="report-title">Teslim Edilenler</span>
+                                <h4>@data.Delivered</h4>
+                            </div>
+                            <div class="inner-card-icon bg-success">
+                                <i class="icon-handbag"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl report-inner-card">
+                            <div class="inner-card-text">
+                                <span class="report-title">İşleme Alınanlar</span>
+                                <h4>@data.InProcess</h4>
+                            </div>
+                            <div class="inner-card-icon bg-danger">
+                                <i class=" icon-settings"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl report-inner-card">
+                            <div class="inner-card-text">
+                                <span class="report-title">Garantiye Verilenler</span>
+                                <h4>@data.GuaranteedItems</h4>
+                            </div>
+                            <div class="inner-card-icon bg-warning">
+                                <i class="icon-disc"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl report-inner-card">
+                            <div class="inner-card-text">
+                                <span class="report-title">Teslim Alınanlar</span>
+                                <h4>@data.Received</h4>
+                            </div>
+                            <div class="inner-card-icon bg-primary">
+                                <i class="icon-paper-plane"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 grid-margin stretch-card">
+            <div class="card quick-status-card">
+                <div class="card-body">
+                    <h4 class="card-title">Pos Bilişim (Çetin) Gidenler</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div id="circle-progress-1"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="circle-progress-2"></div>
+                        </div>
+                    </div>
+                    <input type="hidden" class="cgiden" value="@data.CetinGiden" />
+                    <input type="hidden" class="cgelen" value="@data.CetinGelen" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Genel Özet</h4>
+                    <div class="aligner-wrapper py-3">
+                        <div class="doughnut-chart-height">
+                            <canvas id="sessionsDoughnutChart" height="210"></canvas>
+                        </div>
+                        <div class="wrapper d-flex flex-column justify-content-center absolute absolute-center">
+                            <h2 class="text-center mb-0 font-weight-bold">@data.Total</h2>
+                            <small class="d-block text-center text-muted  font-weight-semibold mb-0">Toplam Ürün</small>
+                        </div>
+                    </div>
+                    <div class="wrapper mt-4 d-flex flex-wrap align-items-cente">
+                        <div class="d-flex">
+                            <span class="square-indicator bg-danger ms-2"></span>
+                            <p class="mb-0 ms-2">T. Edilen</p>
+                        </div>
+                        <div class="d-flex">
+                            <span class="square-indicator bg-success ms-2"></span>
+                            <p class="mb-0 ms-2">Kargoda Olan</p>
+                        </div>
+                        <div class="d-flex">
+                            <span class="square-indicator bg-warning ms-2"></span>
+                            <p class="mb-0 ms-2">T. Alınan</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row quick-action-toolbar">
+        <div class="col-md-12 grid-margin">
+            <div class="card">
+                <div class="card-header d-block d-md-flex">
+                    <h5 class="mb-0">Hızlı İşlemler</h5>
+                </div>
+                <div class="d-md-flex row m-0 quick-action-btns" role="group" aria-label="Quick action buttons">
+                    <div class="col-sm-6 col-md-4 p-3 text-center btn-wrapper">
+                        <a href="/product/saveproduct" class="btn px-0"> <i class="icon-user me-2"></i> Servis Ürün Kaydı</a>
+                    </div>
+                    <div class="col-sm-6 col-md-4 p-3 text-center btn-wrapper">
+                        <a href="/product/listproducts" class="btn px-0"><i class="icon-docs me-2"></i> Serviste Bulunan Ürünler</a>
+                    </div>
+                    <div class="col-sm-6 col-md-4 p-3 text-center btn-wrapper">
+                        <a href="/" class="btn px-0"><i class="icon-folder me-2"></i> Önizleme</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    window.addEventListener("load", (event) => {
+        $('#circle-progress-1 .circle-progress-value').text($('.cgiden').val())
+        $('#circle-progress-1 .circle-progress-label').text("Giden")
+        $('#circle-progress-2 .circle-progress-value').text($('.cgelen').val())
+        $('#circle-progress-2 .circle-progress-label').text("Gelen")
+    });
+</script>

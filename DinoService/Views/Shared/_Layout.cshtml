@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="icon" href="~/images/icon.png" type="image/gif" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>@ViewData["Title"] - Dinosoft Servis</title>
+    <link rel="stylesheet" type="text/css" href="~/hostit-html/css/bootstrap.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="~/hostit-html/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/hostit-html/css/style.css" rel="stylesheet" />
+    <link href="~/hostit-html/css/responsive.css" rel="stylesheet" />
+</head>
+<body>
+    @await Html.PartialAsync("/Views/Shared/Partials/LayoutPartials/_Header.cshtml")
+    <div>
+        @RenderBody()
+    </div>
+
+    @await Html.PartialAsync("/Views/Shared/Partials/LayoutPartials/_Footer.cshtml")
+    <!-- jQery -->
+    <script src="~/hostit-html/js/jquery-3.4.1.min.js"></script>
+    <!-- bootstrap js -->
+    <script src="~/hostit-html/js/bootstrap.js"></script>
+    <!-- custom js -->
+    <script src="~/hostit-html/js/custom.js"></script>
+</body>
+</html>

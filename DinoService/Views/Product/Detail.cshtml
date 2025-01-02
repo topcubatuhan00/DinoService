@@ -1,0 +1,224 @@
+﻿@model ServiceInformation
+@using DinoService.Services
+@inject IServiceInformationService _service
+@{
+    ViewData["Title"] = "Ürün Detayı";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var stats = _service.GetStatus();
+}
+<style>
+    .bootstrap-select {
+        width: 150px !important;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <!-- Card for Service Information -->
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Servis Bilgisi Detayı</h5>
+                </div>
+                <div class="card-body ">
+                    <input type="hidden" value="@Model.Id" class="id" />
+                    <dl class="row">
+                        <div class="p-2 border rounded mt-2 d-flex">
+                            <dt class="col-sm-4">Servis Numarası:</dt>
+                            <dd class="col-sm-8" id="serviceNumber">@Model.ServiceNumber</dd>
+                        </div>
+
+                        <div class="d-flex flex-md-row flex-column w-100 justify-content-between p-0">
+                            <div class="p-2 border rounded mt-2 d-flex w-100 me-md-2 me-0">
+                                <dt class="col-sm-4">Müşteri:</dt>
+                                <dd class="col-sm-8" id="customerName">@Model.CustomerName  @Model.CustomerLastName</dd>
+                            </div>
+
+                            <div class="p-2 border rounded mt-2 d-flex w-100 ms-md-2 ms-0">
+                                <dt class="col-sm-4">Telefon Numarası:</dt>
+                                <dd class="col-sm-8" id="customerPhoneNumber">@Model.CustomerPhoneNumber</dd>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-md-row flex-column w-100 justify-content-between p-0">
+                            <div class="p-2 border rounded mt-2 d-flex w-100 me-md-2 me-0">
+                                <dt class="col-sm-4">Şirket Adı:</dt>
+                                <dd class="col-sm-8" id="customerCompanyName">@Model.CustomerCompanyName</dd>
+                            </div>
+                            <div class="p-2 border rounded mt-2 d-flex w-100 ms-md-2 ms-0">
+                                <dt class="col-sm-4">Durum:</dt>
+                                <dd class="col-sm-8" id="status">
+                                    <select id="statusDetail" name="status" class="selectpicker" data-live-search="true" title="Seçim Yapınız...">
+                                        @foreach (var item in stats)
+                                        {
+                                            @if (item.Status == Model.Status)
+                                            {
+                                                <option style="font-size: 14px !important" value="@item.Status" selected>@item.Status</option>
+                                            }
+                                            else
+                                            {
+                                                <option style="font-size: 14px !important" value="@item.Status">@item.Status</option>
+                                            }
+                                        }
+                                    </select>
+                                </dd>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-md-row flex-column w-100 justify-content-between p-0">
+                            <div class="p-2 border rounded mt-2 d-flex w-100 me-md-2 me-0">
+                                <dt class="col-sm-4">Son Durum Değişiklik Tarihi:</dt>
+                                <dd class="col-sm-8" id="lastStatusChangeDate">@Model.LastStatusChangeDate</dd>
+                            </div>
+
+                            <div class="p-2 border rounded mt-2 d-flex w-100 ms-md-2 ms-0">
+                                <dt class="col-sm-4">Servis Kayıt Tarihi:</dt>
+                                <dd class="col-sm-8" id="serviceRegistirationDate">@Model.ServiceRegistirationDate</dd>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-md-row flex-column w-100 justify-content-between p-0">
+                            <div class="p-2 border rounded mt-2 d-flex w-100 me-md-2 me-0 ">
+                                <dt class="col-sm-4">Ürün Adı:</dt>
+                                <dd class="col-sm-8" id="productName">@Model.ProductName</dd>
+                            </div>
+
+                            <div class="p-2 border rounded mt-2 d-flex  w-100 ms-0 ms-md-2">
+                                <dt class="col-sm-4">Ürün Miktarı:</dt>
+                                <dd class="col-sm-8" id="productAmount">@Model.ProductAmount</dd>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-md-row flex-column w-100 justify-content-between p-0">
+                            <div class="p-2 border rounded mt-2 d-flex w-100 me-md-2 me-0">
+                                <dt class="col-sm-4">Diğer Ürünler:</dt>
+                                <dd class="col-sm-8" id="otherItems">@Model.OtherItems</dd>
+                            </div>
+
+                            <div class="p-2 border rounded mt-2 d-flex w-100 ms-md-2 ms-0">
+                                <dt class="col-sm-4">Ürün Problemi:</dt>
+                                <dd class="col-sm-8" id="productProblem">@Model.ProductProblem</dd>
+                            </div>
+                        </div>
+
+
+                        <div class="d-flex flex-md-row flex-column w-100 justify-content-between p-0">
+                            <div class="p-2 border rounded mt-2 d-flex w-100 me-md-2 me-0 ">
+                                <dt class="col-sm-4">Fiyat:</dt>
+                                <dd class="col-sm-8" id="price">@Model.Price</dd>
+                            </div>
+
+                            <div class="p-2 border rounded mt-2 d-flex w-100 ms-md-2 ms-0 ">
+                                <dt class="col-sm-4">Kargo Alıcı Adı:</dt>
+                                <dd class="col-sm-8" id="kargoAlici">@Model.KargoAlici</dd>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-md-row flex-column w-100 justify-content-between p-0">
+                            <div class="p-2 border rounded mt-2 d-flex w-100 me-md-2 me-0">
+                                <dt class="col-sm-4">Teslim Alan Adı:</dt>
+                                <dd class="col-sm-8" id="teslimAlan">@Model.TeslimAlan</dd>
+                            </div>
+
+                            <div class="p-2 border rounded mt-2 d-flex w-100 ms-md-2 ms-0">
+                                <dt class="col-sm-4">Teslim Tarihi:</dt>
+                                <dd class="col-sm-8" id="serviceLeaveDate">@Model.ServiceLeaveDate</dd>
+                            </div>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="teslimModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Teslim Formu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label>Teslim Alan Kişi</label>
+                <input type="text" class="teslimKisi form-control" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary hideTeslim" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary saveTeslim">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    window.addEventListener("load", (event) => {
+        $('#statusDetail').on('change', function () {
+            var selectedStatus = $(this).val();  // Seçilen değeri al
+            console.log(selectedStatus);  // Değeri konsola yazdır
+
+            if (selectedStatus === "Teslim Edildi") {
+                $('#teslimModal').modal('show');
+            } else {
+                var data = {
+                    Id: $('.id').val(),
+                    Status: selectedStatus,
+                    TeslimAlan: null  // `=` yerine `:` olmalı
+                };
+
+                $.ajax({
+                    url: '/Product/ChangeStatus',
+                    type: 'POST',
+                    data: { model: data },
+                    success: function (r) {
+                        console.log(r);
+                        if (r.success) {
+                            toastr.success('Durum Güncellendi');
+                        } else {
+                            toastr.error('Durum Güncellenmedi');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                        toastr.error(error);
+                    }
+                });
+            }
+        });
+
+        $('.hideTeslim').on('click', function () {
+            $('#teslimModal').modal('hide');
+        })
+
+        $('.saveTeslim').on('click', function () {
+            var data = {
+                Id: $('.id').val(),
+                Status: "Teslim Edildi",
+                TeslimAlan: $('.teslimKisi').val()
+            };
+
+            $.ajax({
+                url: '/Product/ChangeStatus',
+                type: 'POST',
+                data: { model: data },
+                success: function (r) {
+                    if (r.success) {
+                        toastr.success('Durum Güncellendi');
+                    } else {
+                        toastr.error('Durum Güncellenmedi');
+                    }
+                    $('#teslimModal').modal('hide');
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                    toastr.error(error);
+                }
+            });
+        });
+    });
+</script>

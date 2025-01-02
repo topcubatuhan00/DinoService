@@ -1,0 +1,162 @@
+﻿@using DinoService.Services
+@inject IServiceInformationService _service
+@{
+    ViewData["Title"] = "Ürün Kaydı";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var data = await _service.GetProductData();
+}
+
+<div class="page-header">
+    <h3 class="page-title"> Ürün Kaydı Yap </h3>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin">Ana Sayfa</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="/product/listproducts">Ürünler</a></li>
+        </ol>
+    </nav>
+</div>
+<form class="forms-sample">
+    <div class="row">
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Müşteri Bilgileri</h4>
+                    <p class="card-description"> Ürün Teslim Eden Kişi </p>
+                    <div class="form-group">
+                        <label for="customerName">Ad</label>
+                        <input type="text" class="form-control" id="customerName" placeholder="Müşteri Adı" name="customerName">
+                    </div>
+                    <div class="form-group">
+                        <label for="customerLastName">Soyad</label>
+                        <input type="text" class="form-control" id="customerLastName" name="customerLastName" placeholder="Müşteri Soyadı">
+                    </div>
+                    <div class="form-group">
+                        <label for="customerPhoneNumber">İletişim Numarası</label>
+                        <input type="text" class="form-control" id="customerPhoneNumber" name="customerPhoneNumber" placeholder="Müşteri Telefon Numarası">
+                    </div>
+                    <div class="form-group">
+                        <label for="customerCompanyName">Tabela Adı</label>
+                        <input type="text" class="form-control" id="customerCompanyName" name="customerCompanyName" placeholder="İşletme Tabela Adı">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Ürün Bilgileri</h4>
+                    <p class="card-description"> Teslim Edilen Ürün Bilgileri </p>
+                    <div class="form-group">
+                        <label for="productName">Ürün Adı</label>
+                        <input type="text" class="form-control" id="productName" placeholder="Ürün Adı" name="productName">
+                    </div>
+                    <div class="form-group">
+                        <label for="productAmount">Ürün Adedi</label>
+                        <input type="number" value="1" class="form-control" id="productAmount" placeholder="Ürün Adedi" name="productAmount">
+                    </div>
+                    <div class="form-group">
+                        <label for="productProblem">Ürün Problemi</label>
+                        <input type="text" class="form-control" id="productProblem" placeholder="Ürün Problemi" name="productProblem">
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div class="form-group d-flex flex-column">
+                            <label for="otherProducts">Yan Ürünler</label>
+                            <select id="otherProducts" name="otherProducts" class="selectpicker" multiple data-live-search="true" title="Seçim Yapınız...">
+
+                                @foreach (var item in data.OtherProducts)
+                                {
+                                    <option value="@item.ProductName">@item.ProductName</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group d-flex flex-column">
+                            <label for="status">Durumu</label>
+                            <select id="status" name="status" class="selectpicker" data-live-search="true" title="Seçim Yapınız...">
+                                @foreach (var item in data.ServiceStatus)
+                                {
+                                    if (item.Id == 1)
+                                    {
+                                        <option selected value="@item.Status">
+                                            @item.Status
+                                        </option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Status">@item.Status</option>
+                                    }
+
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div class="form-group">
+                            <label for="serviceRegistirationDate">Servis Giriş Tarihi</label>
+                            <input type="date" class="form-control" id="serviceRegistirationDate" placeholder="Servis Giriş Tarihi" name="serviceRegistirationDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Ücret</label>
+                            <input type="text" class="form-control" id="price" placeholder="Fiyat" name="price">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex w-100 justify-content-between">
+        <button type="button" class="resetBtn btn btn-dark btn-icon-text w-25  d-flex justify-content-center align-items-center">
+            <i class="icon-reload btn-icon-prepend"></i>
+            <span>Yeni</span>
+        </button>
+        <button type="button" class="saveProduct btn btn-primary btn-icon-text w-25 d-flex justify-content-center align-items-center">
+            <i class="icon-cloud-upload btn-icon-prepend"></i>
+            <span>Kaydet</span>
+        </button>
+    </div>
+</form>
+
+
+<script>
+    window.addEventListener("load", (event) => {
+        $('.selectpicker').selectpicker();
+
+
+        $('.saveProduct').click(function () {
+            const randomNumber = Math.floor(Math.random() * 9e11) + 1e11;
+
+            var data = {};
+            data = {
+                ServiceNumber: randomNumber,
+                CustomerName: $('#customerName').val(),
+                CustomerLastName: $('#customerLastName').val(),
+                CustomerPhoneNumber: $('#customerPhoneNumber').val(),
+                CustomerCompanyName: $('#customerCompanyName').val(),
+                Status: $('#status').val(),
+                ServiceRegistirationDate: $('#serviceRegistirationDate').val() === null || $('#serviceRegistirationDate').val() === undefined ? null : $('#serviceRegistirationDate').val(),
+                ProductName: $('#productName').val(),
+                ProductAmount: $('#productAmount').val(),
+                OtherItems: $('#otherProducts').val().join(', '),
+                ProductProblem: $('#productProblem').val(),
+                Price: $('#price').val(),
+            }
+            $.ajax({
+                url: '/Product/SaveProduct',
+                type: 'POST',
+                data: { model: data },
+                success: function (response) {
+                    console.log(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        })
+
+        $('.resetBtn').click(function () {
+            $('form')[0].reset();
+            $('.selectpicker').selectpicker('refresh');
+        });
+
+    });
+</script>

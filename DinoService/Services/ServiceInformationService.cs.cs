@@ -22,29 +22,38 @@ public class ServiceInformationService : IServiceInformationService
 
     public async Task<HomeDataModel> GetHomeData()
     {
-        var deliveredCount = await dc.ServiceInformations
-                             .Where(si => si.Status == "Teslim Edildi")
-                             .CountAsync();
-        var receivedCount = await dc.ServiceInformations
-                             .Where(si => si.Status == "Teslim Alındı")
-                             .CountAsync();
-        var guaranteed =  await dc.ServiceInformations
-                             .Where(si => si.Status == "Garantiye Gönderildi")
-                             .CountAsync();
-        var process =  await dc.ServiceInformations
-                             .Where(si => si.Status == "İşleme Alındı")
-                             .CountAsync();
-        var cgiden = await dc.ServiceInformations
-                             .Where(si => si.Status == "Dinosoft Kargoya Verdi" && si.KargoAlici == "Çetin Pos Bilişim")
-                             .CountAsync();
-        var cgelen = await dc.ServiceInformations
-                             .Where(si => si.Status == "Karşı Taraf Kargoya Verdi" && si.KargoAlici == "Çetin Pos Bilişim")
-                             .CountAsync();
+        // Gerekli verileri bir kere çek ve gruplandır.
+        var serviceData = await dc.ServiceInformations
+            .GroupBy(si => new { si.Status, si.KargoAlici })
+            .Select(group => new
+            {
+                group.Key.Status,
+                group.Key.KargoAlici,
+                Count = group.Count()
+            })
+            .ToListAsync();
 
-        var total = await dc.ServiceInformations
-                             .CountAsync();
+        // Verileri gruplardan çek
+        var deliveredCount = serviceData.FirstOrDefault(x => x.Status == "Teslim Edildi")?.Count ?? 0;
+        var receivedCount = serviceData.FirstOrDefault(x => x.Status == "Teslim Alındı")?.Count ?? 0;
+        var guaranteed = serviceData.FirstOrDefault(x => x.Status == "Garantiye Gönderildi")?.Count ?? 0;
+        var process = serviceData.FirstOrDefault(x => x.Status == "İşleme Alındı")?.Count ?? 0;
+        var cgiden = serviceData.FirstOrDefault(x => x.Status == "Garantiye Gönderildi" && x.KargoAlici == "Çetin Pos Bilişim")?.Count ?? 0;
+        var cgelen = serviceData.FirstOrDefault(x => x.Status == "Garantiden Geliyor" && x.KargoAlici == "Çetin Pos Bilişim")?.Count ?? 0;
 
-        return new HomeDataModel { CetinGelen = cgelen, CetinGiden = cgiden, Delivered = deliveredCount, Received = receivedCount, GuaranteedItems = guaranteed, InProcess = process, Total = total };
+        // Tüm kayıt sayısını al
+        var total = await dc.ServiceInformations.CountAsync();
+
+        return new HomeDataModel
+        {
+            CetinGelen = cgelen,
+            CetinGiden = cgiden,
+            Delivered = deliveredCount,
+            Received = receivedCount,
+            GuaranteedItems = guaranteed,
+            InProcess = process,
+            Total = total
+        };
     }
 
     public async Task<SaveProductData> GetProductData()
@@ -60,9 +69,13 @@ public class ServiceInformationService : IServiceInformationService
 
     public async Task<List<ServiceInformation>> GetServiceInformation(GetServiceInformationViewModel? model)
     {
-        var res = await dc.ServiceInformations.ToListAsync();
+        
         if (model != null)
-            res.Where(p => p.ServiceNumber == model.ServiceNumber || p.CustomerPhoneNumber == model.ServiceNumber);
+        {
+            var res2 = await dc.ServiceInformations.Where(p => p.ServiceNumber == model.ServiceNumber || p.CustomerPhoneNumber == model.ServiceNumber).ToListAsync();
+            return res2;
+        }
+        var res = await dc.ServiceInformations.ToListAsync();
         return res;
     }
 
@@ -77,6 +90,12 @@ public class ServiceInformationService : IServiceInformationService
         var e = await dc.ServiceInformations.Where(p => p.Id == model.Id).FirstOrDefaultAsync();
         e.Status = model.Status;
         e.TeslimAlan = model.TeslimAlan;
+        if (model.TeslimAlan != null && model.TeslimAlan.Length > 0)
+        {
+            e.ServiceLeaveDate = DateTime.Now;
+        }
+        e.KargoAlici = model.KargoAlici;
+        e.LastStatusChangeDate = DateTime.Now;
         dc.ServiceInformations.Update(e);
         var res = await dc.SaveChangesAsync();
         return res > 0;

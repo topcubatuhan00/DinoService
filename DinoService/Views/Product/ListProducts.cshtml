@@ -2,8 +2,8 @@
     ViewData["Title"] = "List Product";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-<div class="page-header px-5 pt-3">
-    <h3 class="page-title"> Serviste Bulunan Ürünler </h3>
+<div class="page-header">
+    <span class="page-title"> Serviste Bulunan Ürünler </span>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/admin">Ana Sayfa</a></li>
@@ -18,8 +18,6 @@
                 <thead>
                     <tr>
                         <th class="text-left">Müşteri</th>
-                        <th class="text-left">M. No.</th>
-                        <th class="text-left">M. Tabela Adı</th>
                         <th class="text-left">Ürün Adı</th>
                         <th class="text-left">Ürün Adeti</th>
                         <th class="text-left">Ürün Problemi</th>
@@ -56,39 +54,38 @@
             },
             processing: true,
             serverSide: true,
-            scrollX: true, // Yatay kaydırma eklendi
-            responsive: true, // Responsiveness sağlandı
-            autoWidth: false, // Genişlik ayarını elle kontrol et
+            scrollX: true,
+            responsive: true, 
+            autoWidth: false,
             pageLength: 25,
             scrollY: "500px",
             language: {
                 search: "Ara: "
             },
             columnDefs: [
-                { targets: 0, width: "250px", class: "text-left cursor-pointer" }, // Müşteri
-                { targets: 1, width: "250px", class: "text-left cursor-pointer" }, // M. No.
-                { targets: 2, width: "250px", class: "text-left cursor-pointer" }, // M. Tabela Adı
-                { targets: 3, width: "250px", class: "text-left cursor-pointer" }, // Ürün Adı
-                { targets: 4, width: "250px", class: "text-left cursor-pointer" },  // Ürün Adeti
-                { targets: 5, width: "400px", class: "text-left cursor-pointer" }, // Ürün Problemi
-                { targets: 6, width: "250px", class: "text-left cursor-pointer" }, // Durumu
-                { targets: 7, width: "250px", class: "text-left cursor-pointer" }, // Yan Ürünler
-                { targets: 8, width: "250px", class: "text-left cursor-pointer" }, // Kayıt Tarihi
-                { targets: 9, width: "250px", class: "text-left cursor-pointer" }, // S. Değişiklik Tarihi
-                { targets: 10, width: "250px", class: "text-left cursor-pointer" }, // Teslim Tarihi
-                { targets: 11, width: "250px", class: "text-left cursor-pointer" }, // Teslim Alan
-                { targets: 12, width: "250px", class: "text-left cursor-pointer" }, // Kargo Alıcısı
+                { targets: 0, width: "450px", class: "text-left cursor-pointer borderedTable" }, // Müşteri
+                { targets: 1, width: "250px", class: "text-left cursor-pointer borderedTable" }, // Ürün Adı
+                { targets: 2, width: "250px", class: "text-left cursor-pointer borderedTable" },  // Ürün Adeti
+                { targets: 3, width: "600px", class: "text-left cursor-pointer borderedTable" }, // Ürün Problemi
+                { targets: 4, width: "250px", class: "text-left cursor-pointer borderedTable" }, // Durumu
+                { targets: 5, width: "600px", class: "text-left cursor-pointer borderedTable" }, // Yan Ürünler
+                { targets: 6, width: "250px", class: "text-left cursor-pointer borderedTable" }, // Kayıt Tarihi
+                { targets: 7, width: "250px", class: "text-left cursor-pointer borderedTable" }, // S. Değişiklik Tarihi
+                { targets: 8, width: "250px", class: "text-left cursor-pointer borderedTable" }, // Teslim Tarihi
+                { targets: 9, width: "250px", class: "text-left cursor-pointer borderedTable" }, // Teslim Alan
+                { targets: 10, width: "250px", class: "text-left cursor-pointer borderedTable" }, // Kargo Alıcısı
             ],
             columns: [
                 {
                     data: null,
                     name: "FullName",
                     render: function (data) {
-                        return `${data.customerName || ''} ${data.customerLastName || ''}`;
+                        return `${data.customerName || ''} ${data.customerLastName || ''}  <br />
+                        ${data.customerPhoneNumber || ''} <br />
+                        ${data.customerCompanyName || ''}
+                        `;
                     }
                 },
-                { data: "customerPhoneNumber", name: "customerPhoneNumber" },
-                { data: "customerCompanyName", name: "customerCompanyName" },
                 { data: "productName", name: "productName" },
                 { data: "productAmount", name: "productAmount" },
                 { data: "productProblem", name: "productProblem" },
@@ -133,11 +130,11 @@
         });
 
         $('#productTable tbody').on('dblclick', 'tr', function () {
-            const rowData = table.row(this).data(); // Satırdaki veri alınır
-            const productId = rowData.id; // ID kolonu alınır (backend'den gelen veri alanı olmalı)
+            const rowData = table.row(this).data(); 
+            const productId = rowData.id; 
 
             if (productId) {
-                window.location.href = `/Product/Detail/${productId}`; // Detay sayfasına yönlendirme
+                window.location.href = `/Product/Detail/${productId}`;
             }
         });
     });

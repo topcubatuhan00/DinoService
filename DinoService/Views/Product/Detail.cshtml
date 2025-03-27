@@ -5,6 +5,7 @@
     ViewData["Title"] = "Ürün Detayı";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     var stats = _service.GetStatus();
+    Console.WriteLine(stats);
 }
 <style>
     .bootstrap-select {
@@ -49,15 +50,18 @@
                                 <dt class="col-sm-4">Durum:</dt>
                                 <dd class="col-sm-8" id="status">
                                     <select id="statusDetail" name="status" class="selectpicker" data-live-search="true" title="Seçim Yapınız...">
-                                        @foreach (var item in stats)
+                                        @if (stats != null && stats.Any())
                                         {
-                                            @if (item.Status == Model.Status)
+                                            @foreach (var item in stats)
                                             {
-                                                <option style="font-size: 14px !important" value="@item.Status" selected>@item.Status</option>
-                                            }
-                                            else
-                                            {
-                                                <option style="font-size: 14px !important" value="@item.Status">@item.Status</option>
+                                                @if (item.Status == Model.Status)
+                                                {
+                                                    <option style="font-size: 14px !important" value="@item.Status" selected>@item.Status</option>
+                                                }
+                                                else
+                                                {
+                                                    <option style="font-size: 14px !important" value="@item.Status">@item.Status</option>
+                                                }
                                             }
                                         }
                                     </select>
@@ -66,13 +70,16 @@
                         </div>
                         <div class="d-flex flex-md-row flex-column w-100 justify-content-between p-0">
                             <div class="p-2 border rounded mt-2 d-flex w-100 me-md-2 me-0">
-                                <dt class="col-sm-4">Son Durum Değişiklik Tarihi:</dt>
+                                <dt class="col-sm-4">Son Değişiklik Tarihi:</dt>
                                 <dd class="col-sm-8" id="lastStatusChangeDate">@Model.LastStatusChangeDate</dd>
                             </div>
 
                             <div class="p-2 border rounded mt-2 d-flex w-100 ms-md-2 ms-0">
                                 <dt class="col-sm-4">Servis Kayıt Tarihi:</dt>
-                                <dd class="col-sm-8" id="serviceRegistirationDate">@Model.ServiceRegistirationDate</dd>
+                                <dd class="col-sm-8" id="serviceRegistirationDate">
+                                    @Model.ServiceRegistirationDate.ToString().Split(" ")[0] <br />
+                                    @($"{Model.ServiceRegistirationDate.ToString().Split(' ')[1].Split(':')[0]}:{Model.ServiceRegistirationDate.ToString().Split(' ')[1].Split(':')[1]}")
+                                </dd>
                             </div>
                         </div>
 
@@ -121,7 +128,11 @@
 
                             <div class="p-2 border rounded mt-2 d-flex w-100 ms-md-2 ms-0">
                                 <dt class="col-sm-4">Teslim Tarihi:</dt>
-                                <dd class="col-sm-8" id="serviceLeaveDate">@Model.ServiceLeaveDate</dd>
+                                <dd class="col-sm-8" id="serviceLeaveDate">
+                                    @Model.ServiceLeaveDate.ToString().Split(" ")[0] <br />
+                                    @($"{Model.ServiceLeaveDate.ToString().Split(' ')[1].Split(':')[0]}:{Model.ServiceLeaveDate.ToString().Split(' ')[1].Split(':')[1]}")
+
+                                </dd>
                             </div>
                         </div>
                     </dl>
@@ -144,6 +155,12 @@
             <div class="modal-body">
                 <label>Teslim Alan Kişi</label>
                 <input type="text" class="teslimKisi form-control" />
+                <div class="form-check d-flex justify-content-center align-items-center">
+                    <input style="position:relative" class="form-check-input me-3" type="checkbox" value="" id="defaultCheck1">
+                    <label class="form-check-label fs-4 m-0" for="defaultCheck1">
+                        Kendisi
+                    </label>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary hideTeslim" data-dismiss="modal">Kapat</button>
@@ -159,29 +176,42 @@
 <script>
     window.addEventListener("load", (event) => {
         $('#statusDetail').on('change', function () {
-            var selectedStatus = $(this).val();  // Seçilen değeri al
-            console.log(selectedStatus);  // Değeri konsola yazdır
+            var selectedStatus = $(this).val();
 
             if (selectedStatus === "Teslim Edildi") {
                 $('#teslimModal').modal('show');
-            } else {
-                var data = {
-                    Id: $('.id').val(),
-                    Status: selectedStatus,
-                    TeslimAlan: null  // `=` yerine `:` olmalı
-                };
+            }
+            else {
+                var data = {};
+
+                if (selectedStatus === "Dinosoft Kargoya Verdi" || selectedStatus === "Karşı Taraf Kargoya Verdi") {
+                    data = {
+                        Id: $('.id').val(),
+                        Status: selectedStatus,
+                        TeslimAlan: null,
+                        KargoAlici: "Çetin Pos Bilişim"
+                    }
+                } else {
+                    data = {
+                        Id: $('.id').val(),
+                        Status: selectedStatus,
+                        TeslimAlan: null
+                    }
+                }
 
                 $.ajax({
                     url: '/Product/ChangeStatus',
                     type: 'POST',
                     data: { model: data },
                     success: function (r) {
-                        console.log(r);
                         if (r.success) {
                             toastr.success('Durum Güncellendi');
                         } else {
                             toastr.error('Durum Güncellenmedi');
                         }
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
                     },
                     error: function (xhr, status, error) {
                         console.error(error);
@@ -199,7 +229,7 @@
             var data = {
                 Id: $('.id').val(),
                 Status: "Teslim Edildi",
-                TeslimAlan: $('.teslimKisi').val()
+                TeslimAlan: $('#defaultCheck1').is(':checked') ? 'Kendisi' : $('.teslimKisi').val()
             };
 
             $.ajax({
@@ -213,6 +243,9 @@
                         toastr.error('Durum Güncellenmedi');
                     }
                     $('#teslimModal').modal('hide');
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
                 },
                 error: function (xhr, status, error) {
                     console.error(error);

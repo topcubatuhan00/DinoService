@@ -7,6 +7,12 @@
     var data = await _service.GetProductData();
 }
 
+<style>
+    .bootstrap-select {
+        width: 150px !important;
+    }
+</style>
+
 <div class="page-header">
     <h3 class="page-title"> Ürün Kaydı Yap </h3>
     <nav aria-label="breadcrumb">
@@ -91,11 +97,11 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <div class="form-group">
+                        <div class="form-group me-2">
                             <label for="serviceRegistirationDate">Servis Giriş Tarihi</label>
                             <input type="date" class="form-control" id="serviceRegistirationDate" placeholder="Servis Giriş Tarihi" name="serviceRegistirationDate">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group ms-2">
                             <label for="price">Ücret</label>
                             <input type="text" class="form-control" id="price" placeholder="Fiyat" name="price">
                         </div>

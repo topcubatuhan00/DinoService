@@ -14,7 +14,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="d-sm-flex align-items-baseline report-summary-header">
-                                <h5 class="font-weight-semibold">Servis Özeti</h5> <span class="ms-auto">Güncelle</span> <button class="btn btn-icons border-0 p-2"><i class="icon-refresh"></i></button>
+                                <h5 class="font-weight-semibold">Servis Özeti</h5> <span class="ms-auto">Güncelle</span> <button class="btn btn-icons border-0 p-2 refresh"><i class="icon-refresh"></i></button>
                             </div>
                         </div>
                     </div>
@@ -117,13 +117,16 @@
                 </div>
                 <div class="d-md-flex row m-0 quick-action-btns" role="group" aria-label="Quick action buttons">
                     <div class="col-sm-6 col-md-4 p-3 text-center btn-wrapper">
-                        <a href="/product/saveproduct" class="btn px-0"> <i class="icon-user me-2"></i> Servis Ürün Kaydı</a>
+                        <a href="/product/saveproduct" class="btn px-0 d-flex justify-content-between align-items-center w-100">
+                            <i class="icon-user me-2"></i>
+                            Servis Ürün Kaydı
+                        </a>
                     </div>
                     <div class="col-sm-6 col-md-4 p-3 text-center btn-wrapper">
-                        <a href="/product/listproducts" class="btn px-0"><i class="icon-docs me-2"></i> Serviste Bulunan Ürünler</a>
+                        <a href="/product/listproducts" class="btn px-0 d-flex justify-content-between align-items-center w-100"><i class="icon-docs me-2"></i> Serviste Bulunan Ürünler</a>
                     </div>
                     <div class="col-sm-6 col-md-4 p-3 text-center btn-wrapper">
-                        <a href="/" class="btn px-0"><i class="icon-folder me-2"></i> Önizleme</a>
+                        <a href="/" class="btn px-0 d-flex justify-content-between align-items-center w-100"><i class="icon-folder me-2"></i> Önizleme</a>
                     </div>
                 </div>
             </div>
@@ -138,5 +141,9 @@
         $('#circle-progress-1 .circle-progress-label').text("Giden")
         $('#circle-progress-2 .circle-progress-value').text($('.cgelen').val())
         $('#circle-progress-2 .circle-progress-label').text("Gelen")
+
+        $('.refresh').on('click', function () {
+            location.reload();
+        })
     });
 </script>

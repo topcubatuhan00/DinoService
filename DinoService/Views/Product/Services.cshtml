@@ -22,7 +22,7 @@
                     <div class="img-box">
                         <img src="~/hostit-html/images/s1.png" alt="">
                     </div>
-                    <div class="detail-box w-50">
+                    <div class="detail-box w-100 w-md-50">
                         <form id="serviceForm">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="mb-3">
@@ -35,22 +35,23 @@
                     </div>
                 </div>
             </div>
-            <div id="infoArea" class="w-100 mt-5 d-none">
-                <div class="box ">
-                    <table class="table table-dark">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Ad Soyad</th>
-                                <th scope="col">Ürün Bilgisi</th>
-                                <th scope="col">Son İşlem Tarihi</th>
-                                <th scope="col">Servis Durumu</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                        </tbody>
-                    </table>
+            <div class="container"> 
+                <div id="infoArea" class="w-100 mt-5 d-none">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Ad Soyad</th>
+                                    <th scope="col">Ürün Bilgisi</th>
+                                    <th scope="col">Son İşlem Tarihi</th>
+                                    <th scope="col">Servis Durumu</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

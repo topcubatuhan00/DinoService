@@ -11,6 +11,6 @@ namespace DinoService.Services
         Task<bool> UpdateSlider(Slider slider, bool isDeletd);
 
         Task<List<Service>> GetService();
-        Task<bool> UpdatService(Service service);
+        Task<bool> UpdatService(Service service, bool isDeleted);
     }
 }

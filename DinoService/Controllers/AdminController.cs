@@ -62,17 +62,17 @@ namespace DinoService.Controllers
         }
 
         [Authorize]
-        public IActionResult EditServices()
+        public async Task<IActionResult> EditServices()
         {
-            var res = _service.GetService();
+            var res = await _service.GetService();
             return View(res);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateServices(Service service)
+        public async Task<IActionResult> UpdateServices(Service service, bool isDeleted)
         {
-            var res = await _service.UpdatService(service);
-            return RedirectToAction("EditServices", "Admin");
+            var res = await _service.UpdatService(service, isDeleted);
+            return Json(new { success = res });
         }
     }
 }

@@ -73,15 +73,32 @@ namespace DinoService.Services
             }
         }
 
-        public async Task<bool> UpdatService(Service service)
+        public async Task<bool> UpdatService(Service service, bool isDeletd)
         {
-            var a = await dc.Services.Where(p => p.Id == service.Id).FirstOrDefaultAsync();
-            a.Title = service.Title;
-            a.Content = service.Content;
-            a.Icon = service.Icon;
-            dc.Services.Update(a);
-            var res = await dc.SaveChangesAsync();
-            return res > 0;
+            if (service.Id > 0)
+            {
+                if (isDeletd)
+                {
+                    dc.Services.Remove(service);
+                    var res2 = await dc.SaveChangesAsync();
+                    return res2 > 0;
+                }
+                var a = await dc.Services.Where(p => p.Id == service.Id).FirstOrDefaultAsync();
+                a.Title = service.Title;
+                a.Content = service.Content;
+                a.Icon = service.Icon;
+                dc.Services.Update(a);
+                var res = await dc.SaveChangesAsync();
+                return res > 0;
+            }
+            else
+            {
+                dc.Services.Add(service);
+                var res = await dc.SaveChangesAsync();
+                return res > 0;
+            }
+
+            
         }
     }
 }

@@ -1,5 +1,165 @@
 ﻿@{
     ViewData["Title"] = "Edit Services";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var data = await _adminService.GetService();
 }
-<h1>edit services</h1>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Hizmetlerimiz Yönetimi</h2>
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">Yeni Hizmet Ekle</div>
+        <div class="card-body">
+            <form id="addSliderForm">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="title" class="form-label">Başlık</label>
+                        <input type="text" id="title" class="form-control fTitle" placeholder="Hizmet Başlığı">
+                        <input type="hidden" class="uid">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="content" class="form-label">İçerik</label>
+                        <textarea id="content" class="form-control fContent" placeholder="Hizmet İçeriği"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="buttonLeftText" class="form-label">Icon</label>
+                        <input type="text" id="icon" class="form-control fIcon" placeholder="Icon">
+                    </div>
+                </div>
+                <div class="w-100 d-flex justify-content-center">
+                    <button type="button" class="btn btn-outline-primary w-50 saveService">Ekle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Slider Listesi -->
+    <div class="card">
+        <div class="card-header bg-primary text-white">Hizmetler Listesi</div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Başlık</th>
+                            <th>İçerik</th>
+                            <th>Icon</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (data != null && data.Any())
+                        {
+                            int index = 1;
+                            foreach (var item in data)
+                            {
+                                <tr>
+                                    <td>@index</td>
+                                    <td class="@item.Id-title">@item.Title</td>
+                                    <td class="@item.Id-content">@item.Content</td>
+                                    <td class="@item.Id-icon">@item.Icon</td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm editService" data-id="@item.Id">Düzenle</button>
+                                        <button class="btn btn-danger btn-sm deleteService" data-id="@item.Id">Sil</button>
+                                    </td>
+                                </tr>
+                                index++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center">Henüz hizmet bulunmamaktadır.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.addEventListener("load", (event) => {
+        $('.editService').on('click', function () {
+            const dataId = $(this).data('id');
+
+            let tit = $('.' + dataId + '-title').text().trim();
+            let con = $('.' + dataId + '-content').text().trim();
+            let ico = $('.' + dataId + '-icon').text().trim();
+
+            $('.uid').val(dataId)
+            $('.fTitle').val(tit)
+            $('.fContent').val(con)
+            $('.fIcon').val(ico)
+
+            $('.saveService').text("Güncelle")
+        });
+
+        $('.deleteService').on('click', function () {
+            const dataId = $(this).data('id');
+
+            let tit = $('.' + dataId + '-title').text().trim();
+            let con = $('.' + dataId + '-content').text().trim();
+            let ico = $('.' + dataId + '-icon').text().trim();
+
+            let data = {
+                Id: dataId,
+                Title: tit,
+                Content: con,
+                Icon: ico,
+            };
+
+            $.ajax({
+                url: '/Admin/UpdateServices',
+                type: 'POST',
+                data: { service: data, isDeleted: true },
+                success: function (result) {
+                    if (result.success) {
+                        toastr.success("Hizmet kaldırıldı")
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+
+                    } else {
+                        toastr.error('Güncelleme sırasında bir hata oluştu')
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                    toastr.error(error);
+                }
+            });
+        });
+
+        $('.saveService').on('click', function () {
+            let data = {
+                Id: $('.uid').val(),
+                Title: $('.fTitle').val(),
+                Content: $('.fContent').val(),
+                Icon: $('.fIcon').val(),
+            };
+
+            $.ajax({
+                url: '/Admin/UpdateServices',
+                type: 'POST',
+                data: { service: data, isDeleted: false },
+                success: function (result) {
+                    if (result.success) {
+                        toastr.success("Hizmet güncellendi")
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+
+                    } else {
+                        toastr.error('Güncelleme sırasında bir hata oluştu')
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                    toastr.error(error);
+                }
+            });
+        })
+    });
+</script>

@@ -65,6 +65,13 @@ public class ProductController : Controller
     }
 
     [HttpPost]
+    public async Task<IActionResult> RemoveProduct(int id)
+    {
+        var res = await _serviceInformationService.DeleteProduct(id);
+        return Json(new { success = res });
+    }
+
+    [HttpPost]
     public async Task<IActionResult> ChangeStatus(ChangeStatusModel model)
     {
         var res = await _serviceInformationService.ChangeStatus(model);

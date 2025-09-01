@@ -151,7 +151,20 @@
                 type: 'POST',
                 data: { model: data },
                 success: function (response) {
-                    console.log(response);
+                    if(response){
+                        toastr.success("Ürün kaydı başarılı")
+                        $('#customerName').val("")
+                        $('#customerLastName').val("")
+                        $('#customerPhoneNumber').val("")
+                        $('#customerCompanyName').val("")
+                        $('#status').val("")
+                        $('#serviceRegistirationDate').val("")
+                        $('#productName').val("")
+                        $('#productAmount').val(1)
+                        $('#otherProducts').val("")
+                        $('#productProblem').val("")
+                        $('#price').val("")
+                    }
                 },
                 error: function (xhr, status, error) {
                     console.error(error);

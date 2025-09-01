@@ -12,4 +12,5 @@ public interface IServiceInformationService
     Task<ServiceInformation> GetById(int id);
     List<ServiceStatus> GetStatus();
     Task<bool> ChangeStatus(ChangeStatusModel model);
+    Task<bool> DeleteProduct(int id);
 }

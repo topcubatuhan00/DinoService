@@ -72,10 +72,10 @@ public class ServiceInformationService : IServiceInformationService
         
         if (model != null)
         {
-            var res2 = await dc.ServiceInformations.Where(p => p.ServiceNumber == model.ServiceNumber || p.CustomerPhoneNumber == model.ServiceNumber).ToListAsync();
+            var res2 = await dc.ServiceInformations.Where(p => p.ServiceNumber == model.ServiceNumber || p.CustomerPhoneNumber == model.ServiceNumber).OrderBy(p => p.Id).ToListAsync();
             return res2;
         }
-        var res = await dc.ServiceInformations.ToListAsync();
+        var res = await dc.ServiceInformations.OrderByDescending(p => p.Id).ToListAsync();
         return res;
     }
 
@@ -103,23 +103,42 @@ public class ServiceInformationService : IServiceInformationService
 
     public async Task<bool> SaveServiceProduct(CreatePoductModel model)
     {
-        var res = await dc.ServiceInformations.AddAsync(new ServiceInformation
+        try
         {
-            CustomerName = model.CustomerName,
-            CustomerLastName = model.CustomerLastName,
-            CustomerPhoneNumber = model.CustomerPhoneNumber,
-            CustomerCompanyName = model.CustomerCompanyName,
-            ServiceNumber = model.ServiceNumber,
-            Status = model.Status,
-            ServiceRegistirationDate = model.ServiceRegistirationDate != null ? model.ServiceRegistirationDate : DateTime.Now,
-            ProductName = model.ProductName,
-            ProductAmount = model.ProductAmount,
-            OtherItems = model.OtherItems,
-            ProductProblem = model.ProductProblem,
-            Price = model.Price,
-        });
+            var res = await dc.ServiceInformations.AddAsync(new ServiceInformation
+            {
+                CustomerName = model.CustomerName,
+                CustomerLastName = model.CustomerLastName,
+                CustomerPhoneNumber = model.CustomerPhoneNumber,
+                CustomerCompanyName = model.CustomerCompanyName == null ? "" : model.CustomerCompanyName,
+                ServiceNumber = model.ServiceNumber,
+                Status = model.Status,
+                ServiceRegistirationDate = model.ServiceRegistirationDate != null ? model.ServiceRegistirationDate : DateTime.Now,
+                ProductName = model.ProductName,
+                ProductAmount = model.ProductAmount,
+                OtherItems = model.OtherItems,
+                ProductProblem = model.ProductProblem,
+                Price = model.Price,
+            });
 
-        var res2 = await dc.SaveChangesAsync();
-        return res2 > 0;
+            var res2 = await dc.SaveChangesAsync();
+            return res2 > 0;
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    public async Task<bool> DeleteProduct(int id)
+    {
+        var ent = await dc.ServiceInformations.Where(p => p.Id == id).FirstOrDefaultAsync();
+        if (ent != null)
+        {
+            dc.Remove(ent);
+            var res = await dc.SaveChangesAsync();
+            return res > 0;
+        }
+        return false;
     }
 }

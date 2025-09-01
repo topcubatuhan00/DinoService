@@ -17,17 +17,18 @@
             <table id="productTable" class="display" style="width:100%">
                 <thead>
                     <tr>
+                        <th class="text-left">Sil</th>
                         <th class="text-left">Müşteri</th>
                         <th class="text-left">Ürün Adı</th>
-                        <th class="text-left">Ürün Adeti</th>
                         <th class="text-left">Ürün Problemi</th>
                         <th class="text-left">Durumu</th>
-                        <th class="text-left">Yan Ürünler</th>
-                        <th class="text-left">Kayıt Tarihi</th>
-                        <th class="text-left">S. Değişiklik Tarihi</th>
-                        <th class="text-left">Teslim Tarihi</th>
-                        <th class="text-left">Teslim Alan</th>
-                        <th class="text-left">Kargo Alıcısı</th>
+                        @* <th class="text-left">Ürün Adeti</th> *@
+                        @* <th class="text-left">Yan Ürünler</th> *@
+                        @* <th class="text-left">Kayıt Tarihi</th> *@
+                        @* <th class="text-left">S. Değişiklik Tarihi</th> *@
+                        @* <th class="text-left">Teslim Tarihi</th> *@
+                        @* <th class="text-left">Teslim Alan</th> *@
+                        @* <th class="text-left">Kargo Alıcısı</th> *@
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -43,7 +44,7 @@
         cursor: pointer;
     }
 </style>
-
+@* <button type="button" class="btn btn-danger removeProduct"><i class="fa fa-trash"></i></button> *@
 <script>
     window.addEventListener("load", () => {
         var table = "";
@@ -63,19 +64,28 @@
                 search: "Ara: "
             },
             columnDefs: [
-                { targets: 0, width: "450px", class: "text-left cursor-pointer borderedTable" }, // Müşteri
-                { targets: 1, width: "250px", class: "text-left cursor-pointer borderedTable" }, // Ürün Adı
-                { targets: 2, width: "250px", class: "text-left cursor-pointer borderedTable" },  // Ürün Adeti
+                { targets: 0, width: "100px", orderable: false, class: "text-center borderedTable" },
+                { targets: 1, width: "450px", class: "text-left cursor-pointer borderedTable" }, // Müşteri
+                { targets: 2, width: "250px", class: "text-left cursor-pointer borderedTable" }, // Ürün Adı
+                // { targets: 2, width: "250px", class: "text-left cursor-pointer borderedTable" },  // Ürün Adeti
                 { targets: 3, width: "600px", class: "text-left cursor-pointer borderedTable" }, // Ürün Problemi
                 { targets: 4, width: "250px", class: "text-left cursor-pointer borderedTable" }, // Durumu
-                { targets: 5, width: "600px", class: "text-left cursor-pointer borderedTable" }, // Yan Ürünler
-                { targets: 6, width: "250px", class: "text-left cursor-pointer borderedTable" }, // Kayıt Tarihi
-                { targets: 7, width: "250px", class: "text-left cursor-pointer borderedTable" }, // S. Değişiklik Tarihi
-                { targets: 8, width: "250px", class: "text-left cursor-pointer borderedTable" }, // Teslim Tarihi
-                { targets: 9, width: "250px", class: "text-left cursor-pointer borderedTable" }, // Teslim Alan
-                { targets: 10, width: "250px", class: "text-left cursor-pointer borderedTable" }, // Kargo Alıcısı
+                // { targets: 5, width: "600px", class: "text-left cursor-pointer borderedTable" }, // Yan Ürünler
+                // { targets: 6, width: "250px", class: "text-left cursor-pointer borderedTable" }, // Kayıt Tarihi
+                // { targets: 7, width: "250px", class: "text-left cursor-pointer borderedTable" }, // S. Değişiklik Tarihi
+                // { targets: 8, width: "250px", class: "text-left cursor-pointer borderedTable" }, // Teslim Tarihi
+                // { targets: 9, width: "250px", class: "text-left cursor-pointer borderedTable" }, // Teslim Alan
+                // { targets: 10, width: "250px", class: "text-left cursor-pointer borderedTable" }, // Kargo Alıcısı
             ],
             columns: [
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return `<button type="button" class="btn btn-danger btn-sm removeProduct" data-id="${row.id}">
+                                    <i class="fa fa-trash"></i>
+                                </button>`;
+                    }
+                },
                 {
                     data: null,
                     name: "FullName",
@@ -87,45 +97,45 @@
                     }
                 },
                 { data: "productName", name: "productName" },
-                { data: "productAmount", name: "productAmount" },
+                // { data: "productAmount", name: "productAmount" },
                 { data: "productProblem", name: "productProblem" },
                 { data: "status", name: "status" },
-                { data: "otherItems", name: "otherItems" },
-                {
-                    data: "serviceRegistirationDate",
-                    name: "serviceRegistirationDate",
-                    render: function (data) {
-                        if (data) {
-                            const [date, time] = data.split('T');
-                            return date;
-                        }
-                        return '';
-                    }
-                },
-                {
-                    data: "lastStatusChangeDate",
-                    name: "lastStatusChangeDate",
-                    render: function (data) {
-                        if (data) {
-                            const [date, time] = data.split('T');
-                            return date;
-                        }
-                        return '';
-                    }
-                },
-                {
-                    data: "serviceLeaveDate",
-                    name: "serviceLeaveDate",
-                    render: function (data) {
-                        if (data) {
-                            const [date, time] = data.split('T');
-                            return date;
-                        }
-                        return '';
-                    }
-                },
-                { data: "teslimAlan", name: "teslimAlan" },
-                { data: "kargoAlici", name: "kargoAlici" },
+                // { data: "otherItems", name: "otherItems" },
+                // {
+                //     data: "serviceRegistirationDate",
+                //     name: "serviceRegistirationDate",
+                //     render: function (data) {
+                //         if (data) {
+                //             const [date, time] = data.split('T');
+                //             return date;
+                //         }
+                //         return '';
+                //     }
+                // },
+                // {
+                //     data: "lastStatusChangeDate",
+                //     name: "lastStatusChangeDate",
+                //     render: function (data) {
+                //         if (data) {
+                //             const [date, time] = data.split('T');
+                //             return date;
+                //         }
+                //         return '';
+                //     }
+                // },
+                // {
+                //     data: "serviceLeaveDate",
+                //     name: "serviceLeaveDate",
+                //     render: function (data) {
+                //         if (data) {
+                //             const [date, time] = data.split('T');
+                //             return date;
+                //         }
+                //         return '';
+                //     }
+                // },
+                // { data: "teslimAlan", name: "teslimAlan" },
+                // { data: "kargoAlici", name: "kargoAlici" },
             ],
         });
 
@@ -136,6 +146,30 @@
             if (productId) {
                 window.location.href = `/Product/Detail/${productId}`;
             }
+        });
+
+        $('#productTable tbody').on('click', '.removeProduct', function (e) {
+            e.stopPropagation(); // Satır tıklamasını engelle
+            const productId = $(this).data('id');
+
+            // if (confirm("Bu ürünü silmek istediğinize emin misiniz?")) {
+                $.ajax({
+                    url: "/Product/RemoveProduct",
+                    type: "POST",
+                    data: { id: productId },
+                    success: function (response) {
+                        if (response.success) {
+                            alert("Ürün başarıyla silindi.");
+                            table.ajax.reload(null, false); // Sayfayı yenilemeden tabloyu güncelle
+                        } else {
+                            alert("Silme işlemi başarısız oldu.");
+                        }
+                    },
+                    error: function () {
+                        alert("Bir hata oluştu.");
+                    }
+                });
+            // }
         });
     });
 </script>

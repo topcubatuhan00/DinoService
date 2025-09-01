@@ -77,8 +77,11 @@
                             <div class="p-2 border rounded mt-2 d-flex w-100 ms-md-2 ms-0">
                                 <dt class="col-sm-4">Servis Kayıt Tarihi:</dt>
                                 <dd class="col-sm-8" id="serviceRegistirationDate">
-                                    @Model.ServiceRegistirationDate.ToString().Split(" ")[0] <br />
-                                    @($"{Model.ServiceRegistirationDate.ToString().Split(' ')[1].Split(':')[0]}:{Model.ServiceRegistirationDate.ToString().Split(' ')[1].Split(':')[1]}")
+                                    @if (Model.ServiceRegistirationDate != null)
+                                    {
+                                        @Model.ServiceRegistirationDate.ToString().Split(" ")[0] <br />
+                                        @($"{Model.ServiceRegistirationDate.ToString().Split(' ')[1].Split(':')[0]}:{Model.ServiceRegistirationDate.ToString().Split(' ')[1].Split(':')[1]}")
+                                    }
                                 </dd>
                             </div>
                         </div>
@@ -129,8 +132,11 @@
                             <div class="p-2 border rounded mt-2 d-flex w-100 ms-md-2 ms-0">
                                 <dt class="col-sm-4">Teslim Tarihi:</dt>
                                 <dd class="col-sm-8" id="serviceLeaveDate">
-                                    @Model.ServiceLeaveDate.ToString().Split(" ")[0] <br />
-                                    @($"{Model.ServiceLeaveDate.ToString().Split(' ')[1].Split(':')[0]}:{Model.ServiceLeaveDate.ToString().Split(' ')[1].Split(':')[1]}")
+                                    @if (Model.ServiceLeaveDate != null)
+                                    {
+                                        @Model.ServiceLeaveDate?.ToString("dd.MM.yyyy") <br />
+                                        @Model.ServiceLeaveDate?.ToString("HH:mm")
+                                    }
 
                                 </dd>
                             </div>

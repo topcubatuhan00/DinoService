@@ -61,24 +61,28 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-8 grid-margin stretch-card">
-            <div class="card quick-status-card">
-                <div class="card-body">
-                    <h4 class="card-title">Pos Bilişim (Çetin) Gidenler</h4>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div id="circle-progress-1"></div>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="circle-progress-2"></div>
-                        </div>
+        <div class="col-md-6 quick-action-toolbar">
+            <div class="card">
+                <div class="card-header d-block d-md-flex">
+                    <h5 class="mb-0">Hızlı İşlemler</h5>
+                </div>
+                <div class="d-md-flex row m-0 quick-action-btns" role="group" aria-label="Quick action buttons">
+                    <div class="col-sm-6 col-md-4 p-3 text-center btn-wrapper">
+                        <a href="/product/saveproduct" class="btn px-0 d-flex justify-content-between align-items-center w-100">
+                            <i class="icon-user me-2"></i>
+                            Servis Ürün Kaydı
+                        </a>
                     </div>
-                    <input type="hidden" class="cgiden" value="@data.CetinGiden" />
-                    <input type="hidden" class="cgelen" value="@data.CetinGelen" />
+                    <div class="col-sm-6 col-md-4 p-3 text-center btn-wrapper">
+                        <a href="/product/listproducts" class="btn px-0 d-flex justify-content-between align-items-center w-100"><i class="icon-docs me-2"></i> Serviste Bulunan Ürünler</a>
+                    </div>
+                    <div class="col-sm-6 col-md-4 p-3 text-center btn-wrapper">
+                        <a href="/" class="btn px-0 d-flex justify-content-between align-items-center w-100"><i class="icon-folder me-2"></i> Önizleme</a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 grid-margin stretch-card">
+        <div class="col-md-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Genel Özet</h4>
@@ -108,30 +112,30 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row quick-action-toolbar">
-        <div class="col-md-12 grid-margin">
-            <div class="card">
-                <div class="card-header d-block d-md-flex">
-                    <h5 class="mb-0">Hızlı İşlemler</h5>
-                </div>
-                <div class="d-md-flex row m-0 quick-action-btns" role="group" aria-label="Quick action buttons">
-                    <div class="col-sm-6 col-md-4 p-3 text-center btn-wrapper">
-                        <a href="/product/saveproduct" class="btn px-0 d-flex justify-content-between align-items-center w-100">
-                            <i class="icon-user me-2"></i>
-                            Servis Ürün Kaydı
-                        </a>
+        </div>@* 
+        <div class="row quick-action-toolbar">
+            <div class="col-md-12 grid-margin">
+                <div class="card">
+                    <div class="card-header d-block d-md-flex">
+                        <h5 class="mb-0">Hızlı İşlemler</h5>
                     </div>
-                    <div class="col-sm-6 col-md-4 p-3 text-center btn-wrapper">
-                        <a href="/product/listproducts" class="btn px-0 d-flex justify-content-between align-items-center w-100"><i class="icon-docs me-2"></i> Serviste Bulunan Ürünler</a>
-                    </div>
-                    <div class="col-sm-6 col-md-4 p-3 text-center btn-wrapper">
-                        <a href="/" class="btn px-0 d-flex justify-content-between align-items-center w-100"><i class="icon-folder me-2"></i> Önizleme</a>
+                    <div class="d-md-flex row m-0 quick-action-btns" role="group" aria-label="Quick action buttons">
+                        <div class="col-sm-6 col-md-4 p-3 text-center btn-wrapper">
+                            <a href="/product/saveproduct" class="btn px-0 d-flex justify-content-between align-items-center w-100">
+                                <i class="icon-user me-2"></i>
+                                Servis Ürün Kaydı
+                            </a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 p-3 text-center btn-wrapper">
+                            <a href="/product/listproducts" class="btn px-0 d-flex justify-content-between align-items-center w-100"><i class="icon-docs me-2"></i> Serviste Bulunan Ürünler</a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 p-3 text-center btn-wrapper">
+                            <a href="/" class="btn px-0 d-flex justify-content-between align-items-center w-100"><i class="icon-folder me-2"></i> Önizleme</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </div> *@
 </div>
 
 
